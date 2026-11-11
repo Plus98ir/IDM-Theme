@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDM Theme</title>
+<meta name="description" content="Unofficial modern dark UI and toolbar theme for Internet Download Manager.">
+<meta property="og:title" content="IDM Theme">
+<meta property="og:description" content="Unofficial modern dark UI and toolbar theme for Internet Download Manager.">
+<meta property="og:image" content="https://corenetbase.com/IDM-Theme/img/cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0F0F15">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F0F15; --card: #171722; --line: rgba(255,255,255,.09);
+    --text: #E5E8F2; --muted: #9A9EB2; --teal: #2DD4BF; --purple: #8B5CF6;
+    --grad: linear-gradient(135deg, #2DD4BF, #8B5CF6);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    font-family: 'Vazirmatn', 'Inter', 'Segoe UI', sans-serif;
+    background-image:
+      radial-gradient(900px 500px at 0% 0%, rgba(45,212,191,.12), transparent 70%),
+      radial-gradient(900px 600px at 100% 30%, rgba(139,92,246,.14), transparent 70%);
+    background-repeat: no-repeat;
+  }
+  html[lang="en"] body { font-family: 'Inter', 'Segoe UI', sans-serif; }
+  a { color: var(--teal); }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 32px; border-bottom: 1px solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
+  .lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .lang button {
+    background: none; border: 0; color: var(--muted); padding: 6px 14px; cursor: pointer;
+    font: inherit; font-size: 14px;
+  }
+  .lang button.on { background: var(--grad); color: #fff; }
+  main { width: 100%; padding: 24px 32px; }
+  .hero {
+    display: grid; grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); gap: 40px;
+    align-items: center; padding: 32px 0 48px;
+  }
+  h1 { font-size: clamp(36px, 4vw, 64px); line-height: 1.15; font-weight: 800; }
+  h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lead { color: var(--muted); font-size: clamp(16px, 1.3vw, 21px); margin: 18px 0 26px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px;
+    font-weight: 600; text-decoration: none; color: #fff; border: 1px solid var(--line);
+    background: rgba(255,255,255,.05);
+  }
+  .btn.primary { background: var(--grad); border: 0; }
+  .btn small { opacity: .75; font-weight: 400; }
+  .shot { width: 100%; height: auto; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px var(--line); display: block; }
+  h2 { font-size: clamp(22px, 2vw, 30px); margin: 40px 0 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card h3 { font-size: 17px; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .card img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 12px; display: block; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  ol { padding-inline-start: 22px; color: var(--muted); }
+  ol li { margin: 6px 0; }
+  code { background: rgba(255,255,255,.07); border-radius: 6px; padding: 1px 7px; font-family: Consolas, monospace; font-size: .92em; direction: ltr; unicode-bidi: embed; }
+  .note { border-inline-start: 3px solid var(--purple); padding: 10px 16px; background: rgba(139,92,246,.08); border-radius: 8px; color: var(--muted); margin-top: 16px; }
+  footer { padding: 28px 32px 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 48px; }
+  [data-en] { display: none; }
+  html[lang="en"] [data-fa] { display: none; }
+  html[lang="en"] [data-en] { display: revert; }
+  @media (max-width: 900px) {
+    header, main, footer { padding-left: 16px; padding-right: 16px; }
+    .hero, .two { grid-template-columns: 1fr; }
+  }
+</style>
+<!-- GoatCounter: privacy-friendly visit stats, counted per project -->
+<script>window.goatcounter={path:function(){return "/"+location.pathname.split("/")[1]+"/"}};</script>
+<script data-goatcounter="https://plus98.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 28 28" width="30" height="30" fill="none" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><circle cx="14" cy="14" r="13" fill="url(#g)"/><path d="M14 7.5v9m0 0l-3.6-3.6M14 16.5l3.6-3.6M8.5 19.5h11" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    IDM Theme
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang="fa">فارسی</button>
+    <button type="button" data-lang="en">English</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <h1 data-fa>ظاهر <span>مدرن و تیره</span> برای IDM</h1>
+      <h1 data-en>A <span>modern dark look</span> for IDM</h1>
+      <p class="lead" data-fa>یک رابط کاربری جدید با دکمه‌های پنجره‌ی ویندوزی، به‌همراه تم آیکون تولبار برای خود Internet Download Manager. رایگان، متن‌باز و غیررسمی.</p>
+      <p class="lead" data-en>A new UI with Windows-style window buttons, plus a toolbar icon theme for Internet Download Manager itself. Free, open source and unofficial.</p>
+      <div class="btns">
+        <a class="btn primary" href="https://github.com/Plus98ir/IDM-Theme/releases/latest/download/IDM-Modern-win-x64.zip">
+          <span data-fa>دانلود IDM Modern</span><span data-en>Download IDM Modern</span> <small>(150 MB)</small>
+        </a>
+        <a class="btn" href="https://github.com/Plus98ir/IDM-Theme/releases/latest/download/UIUXMonster-Dark-Toolbar.zip">
+          <span data-fa>تم تولبار</span><span data-en>Toolbar theme</span> <small>(0.1 MB)</small>
+        </a>
+        <a class="btn" href="https://github.com/Plus98ir/IDM-Theme">GitHub</a>
+      </div>
+    </div>
+    <img class="shot" src="img/app.png" alt="IDM Modern screenshot" width="1280" height="760">
+  </section>
+
+  <h2 data-fa>دو بخش، جدا از هم</h2>
+  <h2 data-en>Two parts, use either one</h2>
+  <div class="two">
+    <div class="card">
+      <h3 data-fa>۱. IDM Modern (برنامه‌ی جدا)</h3>
+      <h3 data-en>1. IDM Modern (separate app)</h3>
+      <p data-fa>لیست دانلودهای IDM را زنده از رجیستری ویندوز می‌خواند و نشان می‌دهد: دسته‌بندی، جستجو، نوار پیشرفت، فضای دیسک و تست سرعت. افزودن دانلود و صف‌ها را به خود IDM می‌سپارد، پس اتصال به مرورگر و همه‌چیز مثل قبل کار می‌کند.</p>
+      <p data-en>Reads IDM's download list live from the Windows registry: categories, search, progress bars, disk space and a speed test. Adding downloads and queues is handed to IDM itself, so browser capture and everything else keeps working.</p>
+    </div>
+    <div class="card">
+      <h3 data-fa>۲. تم تولبار UIUXMonster Dark</h3>
+      <h3 data-en>2. UIUXMonster Dark toolbar theme</h3>
+      <p data-fa>۱۲ آیکون تازه برای تولبار خود IDM در سه اندازه (عادی، کوچک و HiDPI)، با حالت hover رنگی. با Dark Mode خود IDM عالی به نظر می‌رسد.</p>
+      <p data-en>12 new icons for IDM's own toolbar in three sizes (normal, small and HiDPI), with coloured hover states. Looks best with IDM's built-in Dark Mode.</p>
+      <img src="img/toolbar.png" alt="Toolbar icons" loading="lazy">
+    </div>
+  </div>
+
+  <h2 data-fa>ویژگی‌ها</h2>
+  <h2 data-en>Features</h2>
+  <div class="grid">
+    <div class="card">
+      <h3 data-fa>دکمه‌های ویندوزی</h3><h3 data-en>Windows buttons</h3>
+      <p data-fa>کوچک‌کردن، بزرگ‌کردن و بستن در گوشه‌ی راست، دقیقاً مثل ویندوز ۱۱؛ بستن با hover قرمز.</p>
+      <p data-en>Minimize, maximize and close on the right, just like Windows 11, with the red close hover.</p>
+      <img src="img/controls.png" alt="Window buttons" width="300" height="60" loading="lazy">
+    </div>
+    <div class="card">
+      <h3 data-fa>داده‌ی واقعی IDM</h3><h3 data-en>Real IDM data</h3>
+      <p data-fa>همان دانلودهای IDM؛ هر ۱۵ ثانیه تازه می‌شود. باز کردن فایل، پوشه، کپی لینک و دانلود دوباره.</p>
+      <p data-en>Your actual IDM downloads, refreshed every 15 seconds. Open file or folder, copy the link, redownload.</p>
+    </div>
+    <div class="card">
+      <h3 data-fa>بدون نصب</h3><h3 data-en>No install</h3>
+      <p data-fa>فایل zip را باز کنید و <code>IDM Modern.exe</code> را اجرا کنید. Node.js لازم نیست.</p>
+      <p data-en>Unzip and run <code>IDM Modern.exe</code>. No Node.js needed.</p>
+    </div>
+    <div class="card">
+      <h3 data-fa>دست به IDM نمی‌زند</h3><h3 data-en>Leaves IDM untouched</h3>
+      <p data-fa>هیچ فایلی از IDM تغییر نمی‌کند؛ امضای دیجیتال و آپدیت‌ها سالم می‌مانند.</p>
+      <p data-en>No IDM file is modified, so its signature and updates stay intact.</p>
+    </div>
+  </div>
+
+  <h2 data-fa>نصب</h2>
+  <h2 data-en>Install</h2>
+  <div class="two">
+    <div class="card">
+      <h3>IDM Modern</h3>
+      <ol data-fa>
+        <li>IDM باید نصب باشد.</li>
+        <li><code>IDM-Modern-win-x64.zip</code> را دانلود و باز کنید.</li>
+        <li><code>IDM Modern.exe</code> را اجرا کنید. اگر Windows SmartScreen هشدار داد: More info ← Run anyway.</li>
+      </ol>
+      <ol data-en>
+        <li>IDM must be installed.</li>
+        <li>Download and unzip <code>IDM-Modern-win-x64.zip</code>.</li>
+        <li>Run <code>IDM Modern.exe</code>. If Windows SmartScreen warns: More info → Run anyway.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3 data-fa>تم تولبار</h3><h3 data-en>Toolbar theme</h3>
+      <ol data-fa>
+        <li>zip را باز کنید و روی <code>install.ps1</code> راست‌کلیک ← Run with PowerShell.</li>
+        <li>IDM را از منوی Tasks ← Exit کامل ببندید و دوباره باز کنید.</li>
+        <li>View ← Toolbar ← UIUXMonster Dark را انتخاب کنید و View ← Dark Mode support را روشن کنید.</li>
+      </ol>
+      <ol data-en>
+        <li>Unzip, right-click <code>install.ps1</code> → Run with PowerShell.</li>
+        <li>Fully close IDM with Tasks → Exit, then open it again.</li>
+        <li>Pick View → Toolbar → UIUXMonster Dark and turn on View → Dark Mode support.</li>
+      </ol>
+    </div>
+  </div>
+  <p class="note" data-fa>این پروژه غیررسمی است و هیچ ارتباطی با شرکت Tonec (سازنده‌ی IDM) ندارد. «Internet Download Manager» و «IDM» علامت تجاری صاحبشان است.</p>
+  <p class="note" data-en>This is an unofficial project, not affiliated with or endorsed by Tonec Inc. (makers of IDM). "Internet Download Manager" and "IDM" are trademarks of their owner.</p>
+</main>
+
+<footer>
+  <span data-fa>ساخته‌شده توسط <a href="https://corenetbase.com/">PLUS98IR</a> · متن‌باز با مجوز MIT</span>
+  <span data-en>Made by <a href="https://corenetbase.com/">PLUS98IR</a> · Open source, MIT license</span>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    function set(lang) {
+      root.lang = lang;
+      root.dir = lang === 'fa' ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-lang]').forEach(function (b) { b.classList.toggle('on', b.dataset.lang === lang); });
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem('lang'); } catch (e) {}
+    var q = new URLSearchParams(location.search).get('lang');
+    set(q || saved || ((navigator.language || '').indexOf('fa') === 0 ? 'fa' : 'en'));
+    document.querySelectorAll('[data-lang]').forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.lang); }); });
+  })();
+</script>
+<script src="https://corenetbase.com/support.js" defer></script>
+</body>
+</html>

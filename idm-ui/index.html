@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;" />
+  <title>IDM Modern</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Shared SVG Gradients for Outlined Icons & Badges -->
+  <svg width="0" height="0" class="svg-defs" aria-hidden="true">
+    <defs>
+      <linearGradient id="grad-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#2DD4BF" />
+        <stop offset="50%" stop-color="#38BDF8" />
+        <stop offset="100%" stop-color="#8B5CF6" />
+      </linearGradient>
+      <linearGradient id="grad-rose" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F472B6" />
+        <stop offset="100%" stop-color="#8B5CF6" />
+      </linearGradient>
+      <linearGradient id="grad-logo" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#2DD4BF" />
+        <stop offset="100%" stop-color="#8B5CF6" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div id="app-window" class="app-window">
+    <!-- Custom Titlebar -->
+    <header id="titlebar" class="titlebar">
+      <div class="titlebar-left">
+        <div class="app-brand" title="IDM Modern — unofficial UI for Internet Download Manager">
+          <span class="app-logo">
+            <svg viewBox="0 0 28 28" width="22" height="22" fill="none">
+              <circle cx="14" cy="14" r="13" fill="url(#grad-logo)" />
+              <path d="M14 7.5v9m0 0l-3.6-3.6M14 16.5l3.6-3.6M8.5 19.5h11" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="app-title">IDM Modern</span>
+          <span class="app-version">Unofficial</span>
+        </div>
+
+        <nav class="menubar" id="menubar" aria-label="Application Menu">
+          <div class="menu-item-wrap">
+            <button class="menu-trigger" data-menu="tasks" type="button">Tasks</button>
+            <div class="menu-dropdown" id="menu-tasks" role="menu">
+              <button class="dropdown-item" data-action="add-url" type="button">
+                <span>Add new download...</span><kbd>Ctrl+N</kbd>
+              </button>
+              <button class="dropdown-item" data-action="start-queue" type="button">
+                <span>Start Main Queue</span><kbd>Ctrl+Q</kbd>
+              </button>
+              <button class="dropdown-item" data-action="stop-all" type="button">
+                <span>Stop All Downloads</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" data-action="open-idm" type="button">
+                <span>Open Classic IDM</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item danger" data-action="exit-app" type="button">
+                <span>Exit</span><kbd>Alt+F4</kbd>
+              </button>
+            </div>
+          </div>
+
+          <div class="menu-item-wrap">
+            <button class="menu-trigger" data-menu="file" type="button">File</button>
+            <div class="menu-dropdown" id="menu-file" role="menu">
+              <button class="dropdown-item" data-action="open-selected" type="button">
+                <span>Open File</span><kbd>Enter</kbd>
+              </button>
+              <button class="dropdown-item" data-action="open-folder" type="button">
+                <span>Open Containing Folder</span>
+              </button>
+              <button class="dropdown-item" data-action="redownload-selected" type="button">
+                <span>Redownload Selected</span>
+              </button>
+              <button class="dropdown-item" data-action="copy-url" type="button">
+                <span>Copy Download URL</span><kbd>Ctrl+C</kbd>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item danger" data-action="delete-selected" type="button">
+                <span>Remove from List</span><kbd>Del</kbd>
+              </button>
+            </div>
+          </div>
+
+          <div class="menu-item-wrap">
+            <button class="menu-trigger" data-menu="downloads" type="button">Downloads</button>
+            <div class="menu-dropdown" id="menu-downloads" role="menu">
+              <button class="dropdown-item" data-action="resume-selected" type="button">
+                <span>Resume Selected</span>
+              </button>
+              <button class="dropdown-item" data-action="stop-selected" type="button">
+                <span>Pause / Stop Selected</span>
+              </button>
+              <button class="dropdown-item" data-action="refresh" type="button">
+                <span>Refresh List</span><kbd>F5</kbd>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" data-action="filter-all" type="button">
+                <span>Show All Downloads</span>
+              </button>
+              <button class="dropdown-item" data-action="filter-unfinished" type="button">
+                <span>Show Unfinished</span>
+              </button>
+              <button class="dropdown-item" data-action="filter-finished" type="button">
+                <span>Show Finished</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="menu-item-wrap">
+            <button class="menu-trigger" data-menu="view" type="button">View</button>
+            <div class="menu-dropdown" id="menu-view" role="menu">
+              <button class="dropdown-item" data-action="toggle-compact" type="button">
+                <span>Toggle Compact Density</span>
+              </button>
+              <button class="dropdown-item" data-action="toggle-sidebar" type="button">
+                <span>Toggle Sidebar</span><kbd>Ctrl+B</kbd>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" data-action="sort-name" type="button">
+                <span>Sort by Name</span>
+              </button>
+              <button class="dropdown-item" data-action="sort-size" type="button">
+                <span>Sort by Size</span>
+              </button>
+              <button class="dropdown-item" data-action="sort-date" type="button">
+                <span>Sort by Last Modified</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="menu-item-wrap">
+            <button class="menu-trigger" data-menu="help" type="button">Help</button>
+            <div class="menu-dropdown" id="menu-help" role="menu">
+              <button class="dropdown-item" data-action="open-options" type="button">
+                <span>UI Preferences</span>
+              </button>
+              <button class="dropdown-item" data-action="run-speed-test" type="button">
+                <span>Run Speed Test</span>
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" data-action="open-about" type="button">
+                <span>About UIUXMonster Dark</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="titlebar-right">
+        <div class="window-controls" aria-label="Window Controls">
+          <button id="btn-minimize" class="win-btn" type="button" title="Minimize" aria-label="Minimize">
+            <svg viewBox="0 0 10 10" width="10" height="10"><path d="M0 5.5h10" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button id="btn-maximize" class="win-btn" type="button" title="Maximize" aria-label="Maximize">
+            <svg class="ico-max" viewBox="0 0 10 10" width="10" height="10"><rect x="0.5" y="0.5" width="9" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+            <svg class="ico-restore" viewBox="0 0 10 10" width="10" height="10"><path d="M2.5 2.5V1.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-1" fill="none" stroke="currentColor" stroke-width="1"/><rect x="0.5" y="2.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+          <button id="btn-close" class="win-btn win-close" type="button" title="Close" aria-label="Close">
+            <svg viewBox="0 0 10 10" width="10" height="10"><path d="M0.5 0.5l9 9M9.5 0.5l-9 9" stroke="currentColor" stroke-width="1"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Body -->
+    <div class="app-body">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="sidebar" aria-label="Download Categories">
+        <div class="sidebar-group">
+          <button class="nav-item active" data-category="all" type="button">
+            <span class="nav-icon cat-all">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4h3.3l1.4 1.6h6.3A1.5 1.5 0 0 1 17 7.1v7.4A1.5 1.5 0 0 1 15.5 16h-11A1.5 1.5 0 0 1 3 14.5v-9z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">All Downloads</span>
+            <span class="nav-count" data-count="all">0</span>
+          </button>
+
+          <button class="nav-item" data-category="music" type="button">
+            <span class="nav-icon cat-music">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <path d="M8 14.5V5.8l8-1.8v8.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="6" cy="14.5" r="2" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="14" cy="12.7" r="2" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            <span class="nav-label">Musics</span>
+            <span class="nav-count" data-count="music">0</span>
+          </button>
+
+          <button class="nav-item" data-category="compressed" type="button">
+            <span class="nav-icon cat-compressed">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <rect x="4" y="3.5" width="12" height="13" rx="2" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10 3.5v13M8.5 6.5h3M8.5 9.5h3M8.5 12.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Compressed</span>
+            <span class="nav-count" data-count="compressed">0</span>
+          </button>
+
+          <button class="nav-item" data-category="videos" type="button">
+            <span class="nav-icon cat-videos">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <rect x="2.8" y="4.5" width="14.4" height="11" rx="2.2" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M8.5 7.7l4.2 2.3-4.2 2.3V7.7z" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="nav-label">Videos</span>
+            <span class="nav-count" data-count="videos">0</span>
+          </button>
+
+          <button class="nav-item" data-category="programs" type="button">
+            <span class="nav-icon cat-programs">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <rect x="3" y="4" width="14" height="12" rx="2" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M6.5 9l2.2 1.8-2.2 1.8M10.5 12.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Programs</span>
+            <span class="nav-count" data-count="programs">0</span>
+          </button>
+
+          <button class="nav-item" data-category="documents" type="button">
+            <span class="nav-icon cat-documents">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <path d="M5.5 3.5h6l3.5 3.5v9.5a1 1 0 0 1-1 1h-8.5a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1z" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M7.5 10.5h5M7.5 13.5h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Documents</span>
+            <span class="nav-count" data-count="documents">0</span>
+          </button>
+
+          <button class="nav-item" data-category="apks" type="button">
+            <span class="nav-icon cat-apks">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <path d="M5.5 10.5a4.5 4.5 0 0 1 9 0v4a1.5 1.5 0 0 1-1.5 1.5H7a1.5 1.5 0 0 1-1.5-1.5v-4z" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M7.5 6.3L6.2 4.3M12.5 6.3l1.3-2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="8.2" cy="9.5" r="0.8" fill="currentColor"/>
+                <circle cx="11.8" cy="9.5" r="0.8" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="nav-label">APKs</span>
+            <span class="nav-count" data-count="apks">0</span>
+          </button>
+
+          <button class="nav-item" data-category="images" type="button">
+            <span class="nav-icon cat-images">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <rect x="3" y="4" width="14" height="12" rx="2" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="7.2" cy="8" r="1.3" fill="currentColor"/>
+                <path d="M4.5 14l3.5-3.4 2.5 2.4 2.3-2.2 2.7 3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Images</span>
+            <span class="nav-count" data-count="images">0</span>
+          </button>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-group sidebar-status-group">
+          <button class="nav-item" data-category="unfinished" type="button">
+            <span class="nav-icon cat-unfinished">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <circle cx="10" cy="10" r="6.8" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10 6.5V10l2.5 1.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Unfinished</span>
+            <span class="nav-count" data-count="unfinished">0</span>
+          </button>
+
+          <button class="nav-item" data-category="finished" type="button">
+            <span class="nav-icon cat-finished">
+              <svg viewBox="0 0 20 20" width="17" height="17" fill="none">
+                <circle cx="10" cy="10" r="6.8" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M7.2 10.2l2 2 3.8-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="nav-label">Finished</span>
+            <span class="nav-count" data-count="finished">0</span>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <button id="btn-sync-status" class="sync-pill" type="button" title="Refresh from IDM Registry">
+            <span class="sync-dot" id="sync-dot"></span>
+            <span id="sync-label">Registry Sync</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Workspace -->
+      <main class="workspace">
+        <!-- Toolbar -->
+        <section class="toolbar" aria-label="Download Actions">
+          <div class="toolbar-actions">
+            <button id="btn-add-url" class="btn-add-url" type="button" title="Add a new download URL (Ctrl+N)">
+              <span class="add-url-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                  <path d="M7 16.5a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17.2 7.2a3.8 3.8 0 0 1 .8 7.52" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 11.5v7m0 0l-2.5-2.5M12 18.5l2.5-2.5" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span>Add Url</span>
+            </button>
+
+            <div class="toolbar-sep"></div>
+
+            <button id="btn-resume" class="tool-btn" type="button" title="Resume Selected Download">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <path class="stroke-target" d="M7.5 5.5l11 6.5-11 6.5V5.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="tool-label">Resume</span>
+            </button>
+
+            <button id="btn-stop" class="tool-btn" type="button" title="Pause / Stop Selected Download">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <rect class="stroke-target" x="6" y="6" width="12" height="12" rx="2.6" stroke="currentColor" stroke-width="1.8"/>
+                </svg>
+              </span>
+              <span class="tool-label">Stop</span>
+            </button>
+
+            <button id="btn-stop-all" class="tool-btn" type="button" title="Stop All Active Downloads">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <circle class="stroke-target" cx="11.5" cy="13" r="6.8" stroke="currentColor" stroke-width="1.8"/>
+                  <path class="stroke-target" d="M9.5 3.8h4M11.5 3.8v2.2M11.5 10.2V13l2 1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="15.5" y="15.5" width="5" height="5" rx="1.2" fill="#16161D" stroke="#2DD4BF" stroke-width="1.5"/>
+                </svg>
+              </span>
+              <span class="tool-label">Stop All</span>
+            </button>
+
+            <button id="btn-delete" class="tool-btn tool-btn-danger" type="button" title="Delete Selected Download (Del)">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <path class="stroke-target" d="M5.5 7h13M9.5 7V5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2M7.5 7l.8 11.5a1.4 1.4 0 0 0 1.4 1.3h4.6a1.4 1.4 0 0 0 1.4-1.3L16.5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path class="stroke-target" d="M10.2 11l3.6 3.6M13.8 11l-3.6 3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="tool-label">Delete</span>
+            </button>
+
+            <button id="btn-options" class="tool-btn" type="button" title="Options & Preferences">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <circle class="stroke-target" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                  <path class="stroke-target" d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a1.9 1.9 0 0 1-2.7 2.7l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a1.9 1.9 0 0 1-3.8 0v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.9 1.9 0 0 1-2.7-2.7l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a1.9 1.9 0 0 1 0-3.8h.2a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.9 1.9 0 0 1 2.7-2.7l.1.1a1.6 1.6 0 0 0 1.8.3h.1a1.6 1.6 0 0 0 1-1.5V3a1.9 1.9 0 0 1 3.8 0v.2a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a1.9 1.9 0 0 1 2.7 2.7l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H21a1.9 1.9 0 0 1 0 3.8h-.2a1.6 1.6 0 0 0-1.4 1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="tool-label">Options</span>
+            </button>
+
+            <button id="btn-queues" class="tool-btn" type="button" title="Start Download Queue">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <rect class="stroke-target" x="5" y="5" width="11" height="11" rx="2.3" stroke="currentColor" stroke-width="1.8"/>
+                  <path class="stroke-target" d="M8.5 18.5h8.5a2 2 0 0 0 2-2V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path class="stroke-target" d="M9.3 8.5l3.6 2-3.6 2v-4z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="tool-label">Queues</span>
+            </button>
+
+            <button id="btn-schedule" class="tool-btn" type="button" title="Scheduler & Queues in IDM">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <rect class="stroke-target" x="4" y="5.5" width="14" height="13.5" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+                  <path class="stroke-target" d="M8 3.5v3M14 3.5v3M4 9.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="17" cy="16.5" r="3.8" fill="#16161D" stroke="#8B5CF6" stroke-width="1.6"/>
+                  <path d="M17 15v1.6l1.1.8" stroke="#2DD4BF" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="tool-label">Schedule</span>
+            </button>
+
+            <button id="btn-share" class="tool-btn" type="button" title="Copy Selected URL to Share">
+              <span class="tool-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                  <path class="stroke-target" d="M14 5h5v5M19 5l-7.5 7.5M18 13.5v4a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="tool-label">Share</span>
+            </button>
+          </div>
+
+          <div class="search-wrap">
+            <span class="search-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" width="15" height="15" fill="none">
+                <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M13.2 13.2L17 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <input id="search-input" class="search-input" type="text" placeholder="Search downloads..." autocomplete="off" spellcheck="false" />
+            <button id="btn-clear-search" class="search-clear hidden" type="button" title="Clear search" aria-label="Clear search">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none">
+                <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Table Section -->
+        <section class="table-section" aria-label="Download List">
+          <div class="table-header" role="row">
+            <div class="col-check">
+              <label class="custom-checkbox" title="Select all visible downloads">
+                <input type="checkbox" id="chk-select-all-head" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <button class="col-header col-name sortable" data-sort="name" type="button">
+              <span>Name</span>
+              <span class="sort-arrow" data-arrow="name">▽</span>
+            </button>
+            <button class="col-header col-size sortable" data-sort="size" type="button">
+              <span>Size</span>
+              <span class="sort-arrow" data-arrow="size">▽</span>
+            </button>
+            <button class="col-header col-status sortable" data-sort="status" type="button">
+              <span>Status</span>
+              <span class="sort-arrow" data-arrow="status">▽</span>
+            </button>
+            <button class="col-header col-time sortable" data-sort="time" type="button">
+              <span>Time Left</span>
+              <span class="sort-arrow" data-arrow="time">▽</span>
+            </button>
+            <button class="col-header col-date sortable active-sort" data-sort="date" type="button">
+              <span>Last Modification</span>
+              <span class="sort-arrow" data-arrow="date">▽</span>
+            </button>
+          </div>
+
+          <div id="downloads-list" class="downloads-list" role="rowgroup">
+            <!-- Rows populated dynamically by renderer.js -->
+          </div>
+
+          <div id="empty-state" class="empty-state hidden">
+            <div class="empty-icon">
+              <svg viewBox="0 0 64 64" width="56" height="56" fill="none">
+                <circle cx="32" cy="32" r="28" fill="#1E1E2A" stroke="url(#grad-accent)" stroke-width="1.5" stroke-opacity="0.6"/>
+                <path d="M23 36a6 6 0 0 1-.8-11.9A8.5 8.5 0 0 1 38.8 22a5.8 5.8 0 0 1 1.2 11.5" stroke="#8B8FA3" stroke-width="2" stroke-linecap="round"/>
+                <path d="M32 28v13m0 0l-4.2-4.2M32 41l4.2-4.2" stroke="url(#grad-accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 id="empty-title">No downloads found</h3>
+            <p id="empty-subtitle">Add a URL or switch categories to view downloads from IDM.</p>
+            <button id="btn-empty-add" class="btn-add-url compact" type="button">Add Url</button>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+          <div class="footer-left">
+            <label class="footer-select-all" title="Select or deselect all visible items">
+              <span class="custom-checkbox">
+                <input type="checkbox" id="chk-select-all-foot" />
+                <span class="checkmark"></span>
+              </span>
+              <span class="select-all-label">Select All</span>
+              <span id="selection-count" class="selection-badge">0 / 0</span>
+            </label>
+
+            <div class="footer-sep"></div>
+
+            <div class="disk-widget">
+              <div class="donut-wrap" title="Local Drive Usage">
+                <canvas id="disk-donut" width="42" height="42"></canvas>
+                <span id="disk-percent" class="donut-text">--%</span>
+              </div>
+              <div class="disk-info">
+                <div class="disk-title-row">
+                  <span id="disk-path" class="disk-path">C:\Downloads</span>
+                </div>
+                <div id="disk-detail" class="disk-detail">Calculating space...</div>
+              </div>
+              <button id="btn-disk-cleaner" class="btn-cleaner" type="button" title="Launch Windows Disk Cleanup">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="none">
+                  <path d="M3 13l4-4m1.5-5.5l4 4-4.5 4.5-4-4L8.5 3.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Disk Cleaner</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="footer-right">
+            <button id="btn-speed-test" class="speed-widget" type="button" title="Click to run Speed Test">
+              <span class="speed-refresh-icon" id="speed-refresh-icon">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
+                  <path d="M13.5 8a5.5 5.5 0 1 1-1.4-3.7M13.5 2.5v2.7h-2.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="speed-label">Speed Test:</span>
+              <span class="speed-metric down" id="speed-down" title="Download Speed">↓ -- Mbps</span>
+              <span class="speed-metric up" id="speed-up" title="Upload Speed">↑ -- Mbps</span>
+            </button>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Right-Click Context Menu -->
+  <div id="context-menu" class="context-menu hidden" role="menu">
+    <button class="ctx-item" data-ctx="open" type="button">
+      <span class="ctx-label">Open File</span>
+    </button>
+    <button class="ctx-item" data-ctx="open-folder" type="button">
+      <span class="ctx-label">Open Containing Folder</span>
+    </button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item" data-ctx="resume" type="button">
+      <span class="ctx-label">Resume Download</span>
+    </button>
+    <button class="ctx-item" data-ctx="stop" type="button">
+      <span class="ctx-label">Pause / Stop Download</span>
+    </button>
+    <button class="ctx-item" data-ctx="redownload" type="button">
+      <span class="ctx-label">Redownload</span>
+    </button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item" data-ctx="copy-url" type="button">
+      <span class="ctx-label">Copy Download URL</span>
+    </button>
+    <button class="ctx-item" data-ctx="copy-path" type="button">
+      <span class="ctx-label">Copy Local File Path</span>
+    </button>
+    <button class="ctx-item" data-ctx="properties" type="button">
+      <span class="ctx-label">Properties</span>
+    </button>
+    <div class="ctx-divider"></div>
+    <button class="ctx-item danger" data-ctx="delete" type="button">
+      <span class="ctx-label">Remove from List</span>
+    </button>
+  </div>
+
+  <!-- Modal: Add URL -->
+  <div id="modal-add-url" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="add-url-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <path d="M7 16.5a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17.2 7.2a3.8 3.8 0 0 1 .8 7.52" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round"/>
+              <path d="M12 11.5v7m0 0l-2.5-2.5M12 18.5l2.5-2.5" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <h2 id="add-url-title">Enter New Address to Download</h2>
+        </div>
+        <button class="modal-close" data-close-modal="modal-add-url" type="button" aria-label="Close">×</button>
+      </div>
+      <form id="form-add-url" class="modal-body">
+        <label class="field-label" for="input-url">Download URL</label>
+        <div class="input-with-action">
+          <input id="input-url" class="dark-input" type="url" placeholder="https://example.com/archive.zip" autocomplete="off" spellcheck="false" />
+          <button id="btn-paste-url" class="btn-secondary small" type="button">Paste</button>
+        </div>
+        <p class="field-hint">Sends the link directly to Internet Download Manager to start capturing and accelerating.</p>
+        <div class="modal-actions">
+          <button id="btn-open-classic-add" class="btn-ghost" type="button">Open Classic IDM</button>
+          <div class="spacer"></div>
+          <button class="btn-secondary" data-close-modal="modal-add-url" type="button">Cancel</button>
+          <button class="btn-gradient" type="submit">Download Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Confirm Delete -->
+  <div id="modal-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h2 id="confirm-title">Confirm Removal</h2>
+        <button class="modal-close" data-close-modal="modal-confirm" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message" class="confirm-text">Are you sure you want to remove the selected download from IDM?</p>
+        <div class="modal-actions">
+          <div class="spacer"></div>
+          <button class="btn-secondary" data-close-modal="modal-confirm" type="button">Cancel</button>
+          <button id="btn-confirm-yes" class="btn-danger" type="button">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Properties -->
+  <div id="modal-properties" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="prop-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="prop-title">Download Properties</h2>
+        <button class="modal-close" data-close-modal="modal-properties" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="properties-grid" class="props-grid"></div>
+        <div class="modal-actions">
+          <button id="btn-prop-folder" class="btn-secondary" type="button">Open Folder</button>
+          <button id="btn-prop-copy-url" class="btn-secondary" type="button">Copy URL</button>
+          <div class="spacer"></div>
+          <button class="btn-gradient" data-close-modal="modal-properties" type="button">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Options -->
+  <div id="modal-options" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="options-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="options-title">UI & Sync Preferences</h2>
+        <button class="modal-close" data-close-modal="modal-options" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="option-row">
+          <div>
+            <div class="option-name">Auto-Refresh Registry</div>
+            <div class="option-desc">Poll IDM download status from Windows Registry</div>
+          </div>
+          <select id="opt-refresh-interval" class="dark-select">
+            <option value="0">Manual Only</option>
+            <option value="5000">Every 5s</option>
+            <option value="15000">Every 15s</option>
+            <option value="30000">Every 30s</option>
+          </select>
+        </div>
+
+        <div class="option-row">
+          <div>
+            <div class="option-name">Monitored Disk Drive</div>
+            <div class="option-desc">Drive letter shown in the footer Disk Space donut</div>
+          </div>
+          <select id="opt-drive" class="dark-select">
+            <option value="C:">C: Drive</option>
+            <option value="D:">D: Drive</option>
+            <option value="E:">E: Drive</option>
+            <option value="F:">F: Drive</option>
+            <option value="H:">H: Drive</option>
+          </select>
+        </div>
+
+        <div class="option-row">
+          <div>
+            <div class="option-name">Compact Row Density</div>
+            <div class="option-desc">Display tighter spacing to show more files at once</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-compact" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-opt-classic-idm" class="btn-ghost" type="button">Open Classic IDM</button>
+          <div class="spacer"></div>
+          <button class="btn-gradient" data-close-modal="modal-options" type="button">Save & Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: About -->
+  <div id="modal-about" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h2 id="about-title">About IDM Modern</h2>
+        <button class="modal-close" data-close-modal="modal-about" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body about-body">
+        <div class="about-hero">
+          <svg viewBox="0 0 28 28" width="44" height="44" fill="none">
+            <circle cx="14" cy="14" r="13" fill="url(#grad-logo)" />
+            <path d="M14 7.5v9m0 0l-3.6-3.6M14 16.5l3.6-3.6M8.5 19.5h11" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div>
+            <div class="about-name">IDM Modern</div>
+            <div class="about-sub">Unofficial dark UI for Internet Download Manager</div>
+          </div>
+        </div>
+        <p class="about-desc">Reads real download queues, progress, and categories directly from Windows Registry and delegates capture, queues, and files to IDM.</p>
+        <p class="about-desc">Not affiliated with or endorsed by Tonec Inc. "Internet Download Manager" and "IDM" are trademarks of their owner.</p>
+        <div class="modal-actions">
+          <div class="spacer"></div>
+          <button class="btn-gradient" data-close-modal="modal-about" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

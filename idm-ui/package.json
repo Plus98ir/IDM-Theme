@@ -1,0 +1,23 @@
+{
+  "name": "idm-modern",
+  "productName": "IDM Modern",
+  "version": "1.0.0",
+  "description": "Unofficial modern dark UI for Internet Download Manager (IDM)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "idm",
+    "electron",
+    "download-manager"
+  ],
+  "author": "PluS98",
+  "license": "MIT",
+  "repository": "github:Plus98ir/IDM-Theme",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^45.3.0"
+  }
+}
