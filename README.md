@@ -58,7 +58,9 @@ In the unzipped folder, right-click `set-default.ps1` → **Run with PowerShell*
 - points IDM's Desktop / Start Menu / taskbar shortcuts to IDM Modern (the IDM icon stays),
 - adds **IDM Classic** to the Start Menu for the original window.
 
-IDM Modern starts IDM in the tray in the background, so browser capture keeps working. Nothing starts with Windows unless IDM's own setting does. The IDM tray icon still opens the classic window.
+- shows IDM Modern's tray icon next to the clock and moves IDM's own icon into the `^` overflow (Windows 11).
+
+IDM Modern starts IDM in the tray in the background, so browser capture keeps working. Like IDM, the ✕ button hides it to the tray; **Tasks → Exit** or the tray menu quits it. Nothing starts with Windows unless IDM's own setting does.
 
 Undo: `.\set-default.ps1 -Undo`
 

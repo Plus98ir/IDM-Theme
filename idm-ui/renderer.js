@@ -830,7 +830,7 @@
         await api?.idmCommand?.('open-idm');
         showToast('Launching Internet Download Manager...');
         break;
-      case 'exit-app': api?.windowControl?.('close'); break;
+      case 'exit-app': api?.windowControl?.('quit'); break;
       case 'open-selected': await handleOpenFile(firstSelected); break;
       case 'open-folder': await handleOpenFolder(firstSelected); break;
       case 'redownload-selected': await handleRedownload(firstSelected); break;

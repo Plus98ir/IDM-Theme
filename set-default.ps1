@@ -54,7 +54,16 @@ function Get-IdmShortcuts([string]$targetPattern) {
     }
 }
 
+# Windows 11 tray: which icons show next to the clock (IsPromoted=1) vs. in the ^ overflow (0).
+function Set-TrayPromoted([string]$exePattern, [int]$value) {
+    Get-ChildItem 'HKCU:\Control Panel\NotifyIconSettings' -ErrorAction SilentlyContinue | ForEach-Object {
+        $p = Get-ItemProperty $_.PSPath
+        if ($p.ExecutablePath -match $exePattern) { Set-ItemProperty $_.PSPath -Name IsPromoted -Value $value -Type DWord }
+    }
+}
+
 if ($Undo) {
+    Set-TrayPromoted 'IDMan\.exe$' 1
     foreach ($s in Get-IdmShortcuts 'IDM Modern\.exe$') {
         $s.TargetPath = $IdmExe
         $s.Arguments = ""
@@ -79,7 +88,7 @@ if ((Test-Path (Join-Path $ScriptDir "IDM Modern.exe")) -and ($ScriptDir.TrimEnd
 }
 if (-not (Test-Path $AppExe)) { Write-Error "IDM Modern.exe not found in '$InstallDir'. Run this script from the unzipped IDM-Modern folder."; exit 1 }
 
-$changed = 0
+$changed = @(Get-IdmShortcuts 'IDM Modern\.exe$').Count   # already set by an earlier run
 foreach ($s in Get-IdmShortcuts 'IDMan\.exe$') {
     if ($s.Arguments) { continue }
     $s.TargetPath = $AppExe
@@ -100,6 +109,16 @@ $c.WorkingDirectory = Split-Path $IdmExe
 $c.IconLocation = "$IdmExe,0"
 $c.Description = "Classic Internet Download Manager window"
 $c.Save()
+
+# Show IDM Modern's tray icon next to the clock and move IDM's own one into the ^ overflow,
+# so clicking the tray icon opens IDM Modern. (IDM Modern's entry appears after its first run.)
+if (-not @(Get-ChildItem 'HKCU:\Control Panel\NotifyIconSettings' -ErrorAction SilentlyContinue |
+           Where-Object { (Get-ItemProperty $_.PSPath).ExecutablePath -match 'IDM Modern\.exe$' })) {
+    $p = Start-Process $AppExe -PassThru
+    Start-Sleep 5
+}
+Set-TrayPromoted 'IDMan\.exe$' 0
+Set-TrayPromoted 'IDM Modern\.exe$' 1
 
 if ($changed -eq 0) {
     $l = $Ws.CreateShortcut($ModernLnks[1])

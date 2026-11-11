@@ -10,11 +10,10 @@ if (typeof electron === 'string' || !electron.app) {
   const child = spawn(exePath, process.argv.slice(1), { stdio: 'inherit', env });
   child.on('exit', (code) => process.exit(code ?? 0));
 } else {
-  const { app, BrowserWindow, ipcMain, shell, dialog } = electron;
-  runMainProcess({ app, BrowserWindow, ipcMain, shell, dialog });
+  runMainProcess(electron);
 }
 
-function runMainProcess({ app, BrowserWindow, ipcMain, shell, dialog }) {
+function runMainProcess({ app, BrowserWindow, ipcMain, shell, dialog, Tray, Menu, nativeImage }) {
 
 const IDM_PATHS = [
   'C:\\Program Files (x86)\\Internet Download Manager\\IDMan.exe',
@@ -458,6 +457,50 @@ async function handleIdmCommand(cmd, payload) {
 // ── Window & IPC Setup ───────────────────────────────────────────────────────
 
 let mainWindow = null;
+let tray = null;
+let isQuitting = false;
+
+function showMainWindow() {
+  if (!mainWindow) {
+    createWindow();
+    return;
+  }
+  if (mainWindow.isMinimized()) mainWindow.restore();
+  mainWindow.show();
+  mainWindow.focus();
+}
+
+function quitApp() {
+  isQuitting = true;
+  app.quit();
+}
+
+async function createTray() {
+  // Use IDM's own icon so the tray looks like IDM; fall back to a plain dot.
+  let icon = null;
+  const idmExe = findIdmExecutable();
+  if (idmExe) {
+    try { icon = await app.getFileIcon(idmExe, { size: 'small' }); } catch { icon = null; }
+  }
+  if (!icon || icon.isEmpty()) {
+    const px = Buffer.alloc(16 * 16 * 4);
+    for (let i = 0; i < 16 * 16; i++) {
+      const x = (i % 16) - 7.5, y = Math.floor(i / 16) - 7.5;
+      if (x * x + y * y <= 56) px.set([0xBF, 0xD4, 0x2D, 0xFF], i * 4); // BGRA teal disc
+    }
+    icon = nativeImage.createFromBitmap(px, { width: 16, height: 16 });
+  }
+  tray = new Tray(icon);
+  tray.setToolTip('IDM Modern');
+  tray.setContextMenu(Menu.buildFromTemplate([
+    { label: 'Open IDM Modern', click: showMainWindow },
+    { label: 'Open Classic IDM', click: () => launchIDM([]) },
+    { type: 'separator' },
+    { label: 'Exit IDM Modern', click: quitApp },
+  ]));
+  tray.on('click', showMainWindow);
+  tray.on('double-click', showMainWindow);
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -484,6 +527,12 @@ function createWindow() {
 
   mainWindow.on('maximize', () => mainWindow?.webContents.send('win:state', { maximized: true }));
   mainWindow.on('unmaximize', () => mainWindow?.webContents.send('win:state', { maximized: false }));
+  // Like IDM: the close button hides to the tray; Exit (Tasks menu or tray) really quits.
+  mainWindow.on('close', (event) => {
+    if (isQuitting || !tray) return;
+    event.preventDefault();
+    mainWindow.hide();
+  });
   mainWindow.on('closed', () => { mainWindow = null; });
 }
 
@@ -531,6 +580,7 @@ function registerIPC() {
       if (mainWindow.isMaximized()) mainWindow.unmaximize();
       else mainWindow.maximize();
     } else if (action === 'close') mainWindow.close();
+    else if (action === 'quit') quitApp();
   });
 }
 
@@ -541,16 +591,13 @@ if (!app.requestSingleInstanceLock()) {
   return;
 }
 
-app.on('second-instance', () => {
-  if (!mainWindow) return;
-  if (mainWindow.isMinimized()) mainWindow.restore();
-  mainWindow.show();
-  mainWindow.focus();
-});
+app.on('second-instance', showMainWindow);
+app.on('before-quit', () => { isQuitting = true; });
 
 app.whenReady().then(() => {
   registerIPC();
   createWindow();
+  createTray().catch((err) => console.error('[tray]', err.message));
   ensureIdmInBackground();
 
   app.on('activate', () => {
