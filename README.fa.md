@@ -56,6 +56,18 @@ TA53aFyGNfSAcrCaJi9QmA9x5W47nPJcf7
 
 اگر بار اول Windows SmartScreen هشدار داد: **More info ← Run anyway** (فایل exe امضای دیجیتال ندارد).
 
+### باز شدن IDM Modern هر بار که IDM را باز می‌کنید
+
+در پوشه‌ی باز‌شده روی `set-default.ps1` راست‌کلیک ← **Run with PowerShell**. این اسکریپت:
+
+- برنامه را در `%LOCALAPPDATA%\Programs\IDM Modern` نصب می‌کند،
+- شورتکات‌های IDM روی دسکتاپ، Start Menu و تسک‌بار را به IDM Modern وصل می‌کند (آیکون IDM می‌ماند)،
+- برای پنجره‌ی قدیمی، شورتکات **IDM Classic** را به Start Menu اضافه می‌کند.
+
+IDM Modern خود IDM را در پس‌زمینه (کنار ساعت) روشن می‌کند تا اتصال به مرورگر کار کند. چیزی با روشن شدن ویندوز اجرا نمی‌شود، مگر تنظیم خود IDM. آیکون IDM کنار ساعت همچنان پنجره‌ی قدیمی را باز می‌کند.
+
+برگرداندن: `.\set-default.ps1 -Undo`
+
 ## ۲. تم تولبار UIUXMonster Dark
 
 ۱۲ آیکون تازه برای تولبار خود IDM در سه اندازه (بزرگ `56×42`، کوچک `32×32`، HiDPI `84×63`)، هر کدام با حالت hover رنگی.

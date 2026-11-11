@@ -50,6 +50,18 @@ A separate app that shows your IDM downloads in a modern dark window.
 
 If Windows SmartScreen warns on first run: **More info → Run anyway** (the exe isn't code-signed).
 
+### Open IDM Modern whenever you open IDM
+
+In the unzipped folder, right-click `set-default.ps1` → **Run with PowerShell**. It:
+
+- installs the app to `%LOCALAPPDATA%\Programs\IDM Modern`,
+- points IDM's Desktop / Start Menu / taskbar shortcuts to IDM Modern (the IDM icon stays),
+- adds **IDM Classic** to the Start Menu for the original window.
+
+IDM Modern starts IDM in the tray in the background, so browser capture keeps working. Nothing starts with Windows unless IDM's own setting does. The IDM tray icon still opens the classic window.
+
+Undo: `.\set-default.ps1 -Undo`
+
 ## 2. UIUXMonster Dark toolbar theme
 
 12 new icons for IDM's own toolbar in three sizes (large `56×42`, small `32×32`, HiDPI `84×63`), each with a coloured hover state.

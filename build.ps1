@@ -27,7 +27,7 @@ New-Item -ItemType Directory -Force $AppSrc | Out-Null
 foreach ($f in "main.js", "preload.js", "renderer.js", "index.html", "styles.css", "package.json") {
     Copy-Item (Join-Path $Ui $f) $AppSrc
 }
-Copy-Item (Join-Path $Root "LICENSE") $App
+Copy-Item (Join-Path $Root "LICENSE"), (Join-Path $Root "set-default.ps1") $App
 
 Compress-Archive -Path $App -DestinationPath (Join-Path $Out "IDM-Modern-win-x64.zip") -CompressionLevel Optimal
 

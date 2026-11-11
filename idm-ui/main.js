@@ -83,6 +83,18 @@ function spawnDetached(exePath, args = []) {
   });
 }
 
+function isIdmRunning() {
+  return execFileAsync('tasklist.exe', ['/FI', 'IMAGENAME eq IDMan.exe', '/NH'], { windowsHide: true })
+    .then((out) => /IDMan\.exe/i.test(out))
+    .catch(() => false);
+}
+
+/** Start IDM quietly in the tray (same switch IDM uses for its own autostart) so capture keeps working. */
+async function ensureIdmInBackground() {
+  if (await isIdmRunning()) return;
+  await launchIDM(['/onboot']);
+}
+
 function launchIDM(args = []) {
   const idmExe = findIdmExecutable();
   if (!idmExe) {
@@ -524,9 +536,22 @@ function registerIPC() {
 
 // ── App Lifecycle ────────────────────────────────────────────────────────────
 
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  return;
+}
+
+app.on('second-instance', () => {
+  if (!mainWindow) return;
+  if (mainWindow.isMinimized()) mainWindow.restore();
+  mainWindow.show();
+  mainWindow.focus();
+});
+
 app.whenReady().then(() => {
   registerIPC();
   createWindow();
+  ensureIdmInBackground();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
