@@ -13,6 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
+:root{--gutter:max(50px,3vw)}@media (max-width:640px){:root{--gutter:16px}}
+
   :root {
     --bg: #0F0F15; --card: #171722; --line: rgba(255,255,255,.09);
     --text: #E5E8F2; --muted: #9A9EB2; --teal: #2DD4BF; --purple: #8B5CF6;
@@ -32,7 +34,7 @@
   a { color: var(--teal); }
   header {
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    padding: 18px 32px; border-bottom: 1px solid var(--line);
+    padding: 18px var(--gutter); border-bottom: 1px solid var(--line);
   }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; }
   .lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
@@ -41,7 +43,7 @@
     font: inherit; font-size: 14px;
   }
   .lang button.on { background: var(--grad); color: #fff; }
-  main { width: 100%; padding: 24px 32px; }
+  main { width: 100%; padding: 24px var(--gutter); }
   .hero {
     display: grid; grid-template-columns: minmax(0, 38fr) minmax(0, 62fr); gap: 40px;
     align-items: center; padding: 32px 0 48px;
@@ -69,12 +71,12 @@
   ol li { margin: 6px 0; }
   code { background: rgba(255,255,255,.07); border-radius: 6px; padding: 1px 7px; font-family: Consolas, monospace; font-size: .92em; direction: ltr; unicode-bidi: embed; }
   .note { border-inline-start: 3px solid var(--purple); padding: 10px 16px; background: rgba(139,92,246,.08); border-radius: 8px; color: var(--muted); margin-top: 16px; }
-  footer { padding: 28px 32px 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 48px; }
+  footer { padding: 28px var(--gutter) 40px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 48px; }
   [data-en] { display: none; }
   html[lang="en"] [data-fa] { display: none; }
   html[lang="en"] [data-en] { display: revert; }
   @media (max-width: 900px) {
-    header, main, footer { padding-left: 16px; padding-right: 16px; }
+    header, main, footer { padding-left: var(--gutter); padding-right: var(--gutter); }
     .hero, .two { grid-template-columns: 1fr; }
   }
 </style>
